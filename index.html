@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./index.js"></script>
+
+</head>
+
+<body>
+
+    <div class="mb-4 p-4 bg-light border-bottom">
+        <h1>Cryptonite</h1>
+    </div>
+    <div class="container">
+        <nav class="mb-2">
+            <div class="container-fluid">
+                <div class=" d-flex flex-row flex-wrap">
+                    <ul class="navbar-nav nav-pills me-auto mb-2 mb-lg-0 d-flex flex-row flex-wrap">
+                        <li class="nav-item m-2">
+                            <a class="nav-link  p-2 active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item m-2 ">
+                            <a class="nav-link p-2" href="#">Live Reports</a>
+                        </li>
+                        <li class="nav-item m-2">
+                            <a class="nav-link p-2" href="#">About</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex m-2 " role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <div id="cardWrapper" class="d-flex flex-row flex-wrap">
+            <!-- Card -->
+            <div class="card col-lg-4 col-md-12">
+                <div class="card-body">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                        </div>
+                    </div>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                        aria-expanded="false" aria-controls="collapseExample">
+                        More Info
+                    </a>
+                    <!-- collapse -->
+                    <div class="" id="collapseExample">
+                        <div class="card card-body mt-2" id="info-">
+                            <img class="coin-thumb"
+                                src="https://assets.coingecko.com/coins/images/11996/small/683JEXMN_400x400.png?1596689733" />
+                            <table class="price-table">
+                                <thead>
+                                    <th>USD</th>
+                                    <th>EUR</th>
+                                    <th>ILS</th>
+                                </thead>
+                                <tbody>
+                                    <td>21354</td>
+                                    <td>2341654</td>
+                                    <td>23135</td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+</body>
+
+</html>

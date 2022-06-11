@@ -1,0 +1,22 @@
+.price-table {
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.coin-thumb {
+    width: 5rem;
+    margin: auto;
+    margin-bottom: 1.5rem;
+}
+
+.usd {
+    color: #0A5ED7;
+}
+
+.eur {
+    color: #0a8fd7;
+}
+
+.ils {
+    color: #0A5ED7;
+}

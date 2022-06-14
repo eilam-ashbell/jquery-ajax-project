@@ -14,7 +14,10 @@
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"
         defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="./index.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./report.js" defer></script>
+    <script src="./index.js"  defer></script>
+
 
 </head>
 
@@ -28,16 +31,16 @@
         <nav class="mb-2">
             <div class="container-fluid">
                 <div class=" d-flex flex-row flex-wrap">
-                    <ul class="navbar-nav nav-pills me-auto mb-2 mb-lg-0 d-flex flex-row flex-wrap">
+                    <ul class="navbar-nav nav-pills me-auto mb-2 mb-lg-0 d-flex flex-row flex-wrap"
+                        onclick="changeTab(event)">
                         <li class="nav-item m-2">
-                            <a class="nav-link  p-2 active" aria-current="page" href="#"
-                                onclick="changeTab(event)"  data-tab="home">Home</a>
+                            <a class="nav-link  p-2 active" aria-current="page" href="#" data-tab="home">Home</a>
                         </li>
                         <li class="nav-item m-2 ">
-                            <a class="nav-link p-2" href="#" onclick="changeTab(event)"  data-tab="live">Live Reports</a>
+                            <a class="nav-link p-2" href="#" data-tab="live">Live Reports</a>
                         </li>
                         <li class="nav-item m-2">
-                            <a class="nav-link p-2" href="#" onclick="changeTab(event)" data-tab="about">About</a>
+                            <a class="nav-link p-2" href="#" data-tab="about">About</a>
                         </li>
                     </ul>
                     <form class="d-flex m-2 " role="search">
@@ -110,7 +113,8 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" id="cancelModal" class="btn btn-secondary" data-bs-dismiss="modal" onclick="cancelModal(event)">Cancel</button>
+                                <button type="button" id="cancelModal" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    onclick="cancelModal(event)">Cancel</button>
                                 <button type="button" id="saveModal" class="btn btn-primary" data-coin-symbol=""
                                     onclick="saveModalSettings (event)">Save changes</button>
                             </div>
@@ -119,13 +123,7 @@
                 </div>
             </div>
 
-            <div id="live" class="tab">
-                <p>live</p>
-            </div>
-            <div id="about" class="tab">
-                <p>about</p>
-
-            </div>
+           
 
 
 
@@ -134,7 +132,16 @@
 
 
         </div>
-
+        <div id="live" class="tab">
+            <p>live</p>
+            <div>
+                <canvas id="report"></canvas>
+            </div>
+        </div>
+        <div id="about" class="tab">
+            <p>about</p>
+        </div>
+    </div>
 
 
 

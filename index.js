@@ -1,4 +1,7 @@
+// --- FIRST INIT ---
+
 const DEV_MODE = true;
+const CACH = {};
 
 // get coin list API as app loaded
 $.ajax({
@@ -9,35 +12,9 @@ $.ajax({
   success: (res) => insertCardsToDom(res),
 });
 
-// get more data about spesific coin and display it with createMoreInfo template
-function getMoreInfo(event) {
-  event.preventDefault();
-  const BASE_URL = "https://api.coingecko.com/api/v3/coins/";
-  const coinId = event.target.dataset.coinId;
-  $.ajax({
-    type: "get",
-    url: BASE_URL + coinId,
-    // data: "data",
-    // dataType: "json",
-    success: (res) => {
-      const moreInfo = createMoreInfo(res);
-      $(`#info-${res.id}`).html(moreInfo);
-    },
-    error: (err) => console.log(err),
-  });
-}
-
-// disply number as currency
-function formatToCurrency(num, currency) {
-  return new Intl.NumberFormat("he-HE", {
-    style: "currency",
-    currency: currency,
-    currencyDisplay: "symbol",
-    roundingMode: "floor",
-  }).format(num);
-}
-
-// insert cards to the DOM
+// gets array of coins
+// creates for each coin HTML string card template in chain
+// insert all cards HTML string to the DOM
 function insertCardsToDom(arr) {
   let cards = "";
   if (DEV_MODE) {
@@ -61,30 +38,76 @@ function insertCardsToDom(arr) {
 // {id: '01coin', symbol: 'zoc', name: '01coin'}
 function createCoinCard(coinObj) {
   return `<div class="card col-lg-4 col-12">
-    <div class="card-body" data-id="${coinObj.id}" data-name="${coinObj.name}" data-symbol="${coinObj.symbol}">
-        <div class="d-flex flex-row justify-content-between">
-            <h5 class="card-title">${coinObj.symbol}</h5>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="select-${coinObj.symbol}" data-coin-symbol="${coinObj.symbol}" onclick="setToReport('${coinObj.symbol}')">
-            </div>
-        </div>
-        <p class="card-text">${coinObj.name}</p>
-          <a class="btn btn-primary" data-bs-toggle="collapse" href="#data-${coinObj.id}" role="button"
-              aria-expanded="false" aria-controls="data-${coinObj.id}" data-coin-id="${coinObj.id}" onclick="getMoreInfo(event)">
-              More Info
-          </a>
-          <div class="collapse" id="data-${coinObj.id}">
-              <div class="card card-body mt-2" id="info-${coinObj.id}">
-              <div class="spinner-border text-primary m-auto" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
+      <div class="card-body" data-id="${coinObj.id}" data-name="${coinObj.name}" data-symbol="${coinObj.symbol}">
+          <div class="d-flex flex-row justify-content-between">
+              <h5 class="card-title">${coinObj.symbol}</h5>
+              <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="select-${coinObj.symbol}" data-coin-symbol="${coinObj.symbol}" onclick="setToReport('${coinObj.symbol}')">
               </div>
           </div>
-      </div>
-  </div>`;
+          <p class="card-text">${coinObj.name}</p>
+            <a class="btn btn-primary" data-bs-toggle="collapse" href="#data-${coinObj.id}" role="button"
+                aria-expanded="false" aria-controls="data-${coinObj.id}" data-coin-id="${coinObj.id}" onclick="getMoreInfo(event)">
+                More Info
+            </a>
+            <div class="collapse" id="data-${coinObj.id}">
+                <div class="card card-body mt-2" id="info-${coinObj.id}">
+                <div class="spinner-border text-primary m-auto" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
 }
 
-// more info template
+// --- HANDLE NAVIGATION ---
+function changeTab(event) {
+    if ($(event.target).hasClass("nav-link")) {
+    $(".nav-link").removeClass("active");
+    $(event.target).addClass("active");
+    $(".tab").hide();
+    $(`#${event.target.dataset.tab}`).show();
+    if (event.target.dataset.tab === "live") {
+        initData()
+    } else {
+        stopLiveReport()
+    }
+    }
+  }
+
+// --- HANDLE MORE INFO ---
+
+// get more info about spesific coin and display it with createMoreInfo template
+// after first fetch > save in cach with timestamp
+// if last fetch was over 2 min > fetch again. else get from cach
+function getMoreInfo(event) {
+  event.preventDefault();
+  const BASE_URL = "https://api.coingecko.com/api/v3/coins/";
+  const coinId = event.target.dataset.coinId;
+  if (!CACH[coinId]) {
+    // if not in cach > get with fetch
+    getMoreData(BASE_URL, coinId);
+  } else if (new Date().getTime() - CACH[coinId][1] > 120000) {
+    // if over 2 min > get with fetch
+    getMoreData(BASE_URL, coinId);
+  } else {
+    // if in cach & under 2 min > get with cach and display
+    $(`#info-${coinId}`).html(createMoreInfo(CACH[coinId][0]));
+  }
+}
+
+// fetch info from API & display > save in cach
+function getMoreData(BASE_URL, coinId) {
+  fetch(BASE_URL + coinId)
+    .then((res) => res.json())
+    .then((resJ) => {
+      $(`#info-${resJ.id}`).html(createMoreInfo(resJ));
+      CACH[resJ.id] = [resJ, new Date().getTime()]; // save in cach
+    });
+}
+
+// more info template - return HTML string
 function createMoreInfo(obj) {
   return `<img class="coin-thumb"
       src="${obj.image.small}" />
@@ -111,7 +134,17 @@ function createMoreInfo(obj) {
   </table>`;
 }
 
-// REPORTS
+// get number and currency type and return number as that currency
+function formatToCurrency(num, currency) {
+  return new Intl.NumberFormat("he-HE", {
+    style: "currency",
+    currency: currency,
+    currencyDisplay: "symbol",
+    roundingMode: "floor",
+  }).format(num);
+}
+
+// --- HANDLE SWITCHES FOR LIVE REPORT ---
 
 let coinsToReport = [];
 const reportModal = new bootstrap.Modal("#reportModal");
@@ -130,7 +163,6 @@ function setToReport(coin) {
     } else {
       coinsToReport.push(coin);
       $(`#select-${coin}`).prop("checked", true);
-      console.log(coinsToReport);
     }
   } else {
     removeCoinFromReport(coin);
@@ -153,14 +185,12 @@ function getModalData(coinName) {
 function removeCoinFromReport(coin) {
   coinsToReport = coinsToReport.filter((element) => element !== coin);
   $(`#select-${coin}`).prop("checked", false);
-  console.log(coinsToReport);
 }
 
 function saveModalSettings(event) {
   if (coinsToReport.length < 5) {
     coinsToReport.push(event.target.dataset.coinSymbol);
     $(`#select-${event.target.dataset.coinSymbol}`).prop("checked", true);
-    console.log(coinsToReport);
   }
   reportModal.hide();
 }
@@ -173,12 +203,125 @@ function cancelModal(event) {
   coinsToReport = list;
 }
 
-// Navigation
 
-function changeTab(event) {
-  $(".nav-link").removeClass("active");
-  $(event.target).addClass("active");
-  $(".tab").hide();
-  console.log(event.target.dataset.tab);
-  $(`#${event.target.dataset.tab}`).show();
-}
+// --- CHART ---
+
+    const canvas = document.getElementById("report");
+    let reportChart; //                                 will get the Chart object
+    const LABELS_NUMBER = 50; //                         define how much labels will be in the chart
+    const labels = new Array(LABELS_NUMBER); //         Array of all chart labels
+    let updateReportInterval; //                        will get the id of the chart update interval
+  
+    function initData() {
+      const dataset = []; //    Array of dataset objects
+      //                        datasetObject = {  label: coinName,
+      //                        yAxisID: coinName,
+      //                        data: data from API [],
+      //                        borderColor: string,
+      //                        backgroundColor: string}
+      fetch(
+        `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${coinsToReport}&tsyms=USD`
+      )
+        .then((res) => res.json())
+        .then((resJ) => {
+          coinsPrice = Object.entries(resJ);
+          // resJ example: [["HALF",{USD: 13659.5}],["ALGOHALF",{USD: 10666.5}],["BCHHALF",{USD: 6387}]]
+          coinsPrice.forEach((element, index) => {
+            dataset.push({
+              label: `${element[0]}`,
+              yAxisID: `A`,
+              data: [element[1].USD],
+              borderColor: getColor(index),
+              backgroundColor: getColor(index),
+            });
+          });
+          initLabels();
+          createChart(dataset, labels);
+        });
+    }
+  
+    function initLabels() {
+      const currentTime = new Date().getTime();
+      labels[0] = new Date(currentTime).toLocaleTimeString("en-US", {
+        hour12: false,
+      });
+      for (let i = 1; i <= LABELS_NUMBER; i++) {
+        labels[i] = new Date(currentTime + 2000 * i).toLocaleTimeString("en-US", {
+          hour12: false,
+        });
+      }
+    }
+  
+    function createChart(dataset, labels) {
+      reportChart = new Chart(canvas, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: dataset,
+        },
+        options: {
+          animation: false,
+        },
+      });
+      startInterval(reportChart);
+    }
+  
+    function startInterval(reportChart) {
+      updateReportInterval = setInterval(() => {
+        fetch(
+          `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${coinsToReport}&tsyms=USD`
+        )
+          .then((res) => res.json())
+          .then((resJ) => {
+            coinsPrice = Object.entries(resJ);
+            // resJ example: [["HALF",{USD: 13659.5}],["ALGOHALF",{USD: 10666.5}],["BCHHALF",{USD: 6387}]]
+            coinsPrice.forEach((element, i) => {
+              if (reportChart.data.datasets[i].data.length < LABELS_NUMBER) {
+                reportChart.data.datasets[i].data.push(element[1].USD);
+              } else {
+                reportChart.data.datasets[i].data.push(element[1].USD);
+                reportChart.data.datasets[i].data.shift();
+              }
+            });
+            if (reportChart.data.datasets[0].data.length >= LABELS_NUMBER) {
+              labels.push(
+                new Date(new Date().getTime() + 4000).toLocaleTimeString(
+                  "en-US",
+                  {
+                    hour12: false,
+                  }
+                )
+              );
+              labels.shift();
+            }
+  
+            reportChart.update();
+          });
+      }, 2000);
+    }
+  
+    function stopLiveReport() {
+      clearInterval(updateReportInterval);
+      reportChart.destroy();
+    }
+  
+    function getColor(index) {
+      switch (index) {
+        case 0:
+          return "#046E8F";
+          break;
+        case 1:
+          return "#70929F";
+          break;
+        case 2:
+          return "#38AECC";
+          break;
+        case 3:
+          return "#0090C1";
+          break;
+        case 4:
+          return "#183446";
+          break;
+      }
+    }
+  

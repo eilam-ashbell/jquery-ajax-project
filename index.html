@@ -15,8 +15,8 @@
         defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="./report.js" defer></script>
-    <script src="./index.js"  defer></script>
+    <!-- <script src="./report.js" defer></script> -->
+    <script src="./index.js" defer></script>
 
 
 </head>
@@ -44,9 +44,11 @@
                         </li>
                     </ul>
                     <form class="d-flex m-2 " role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+                        <input id="searchBox" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" oninput="newSearch()">
+                        <button class="btn btn-outline-success" type="submit" >Search</button>
                     </form>
+                    <button id="showActive" class="btn btn-outline-primary mt-2 mb-2" onclick="toggleActive()">Selected</button>
+
                 </div>
             </div>
         </nav>

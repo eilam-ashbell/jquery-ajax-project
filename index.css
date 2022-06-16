@@ -1,14 +1,13 @@
-.price-table {
-    font-size: 0.8rem;
+.bold {
+    font-weight: 700;
+}
+
+.center {
     text-align: center;
 }
 
-.coin-thumb {
-    width: 5rem;
-    margin: auto;
-    margin-bottom: 1.5rem;
-}
 
+/* currencies */
 .usd {
     color: #0A5ED7;
 }
@@ -21,6 +20,113 @@
     color: #0A5ED7;
 }
 
+/* navigation */
+nav {
+    position: sticky;
+    top: 160px;
+    background-color: white;
+    z-index: 998;
+    padding: 16px 0 16px 0;
+    margin-top: 20px;
+}
+
 .nav-link.active {
-    color: white  !important; 
+    color: white !important;
+}
+
+#live {
+    display: none;
+}
+
+#about {
+    display: none;
+}
+
+/* main content */
+#noRes {
+    display: none;
+    text-align: center;
+    margin: auto;
+    margin-top: 20px;
+    opacity: 0.5;
+    font-weight: 300;
+}
+
+#searchTerm {
+    font-weight: 700;
+}
+
+#coinSpan {
+    font-weight: 700;
+    color: #0A5ED7;
+}
+
+#initLoader {
+    display: block;
+    margin: auto;
+}
+
+.about-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.about-wrapper>div {
+    align-self: center;
+    margin: 16px;
+}
+
+/* modal */
+.price-table {
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.coin-thumb {
+    width: 5rem;
+    margin: auto;
+    margin-bottom: 1.5rem;
+}
+
+.modalSwitch {
+    margin-right: 12px;
+}
+
+.tr-modal {
+    height: 34px;
+}
+
+
+/* header */
+#header {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color: #1F2033 !important;
+    background-image: url("./src/Crypto-Wallet-Send-Receive-Exchange-Cryptocurrency-Exodus-2020-01-30-23-49-57.webp");
+    background-position: right top;
+    background-size: 40%;
+    background-repeat: no-repeat;
+    height: 10rem;
+    color: white;
+}
+
+#headerImage {
+    max-width: 100px;
+    background-color: rgb(248, 249, 250);
+    border-radius: 120px;
+    border: 1px solid #dee2e6;
+    position: absolute;
+    right: 2%;
+    top: 100px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    font-size: 40px;
+    align-self: center;
+
 }

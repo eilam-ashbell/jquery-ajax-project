@@ -23,12 +23,13 @@
 
 <body>
 
-    <div class="mb-4 p-4 bg-light border-bottom">
+    <div id="header" class="mb-4 p-4 bg-light border-bottom">
         <h1>Cryptonite</h1>
+        <img id="headerImage" src="./src/nav.png">
     </div>
     <div class="container">
         <!-- Navigation -->
-        <nav class="mb-2">
+        <nav class="mb-2 border-bottom">
             <div class="container-fluid">
                 <div class=" d-flex flex-row flex-wrap">
                     <ul class="navbar-nav nav-pills me-auto mb-2 mb-lg-0 d-flex flex-row flex-wrap"
@@ -44,17 +45,23 @@
                         </li>
                     </ul>
                     <form class="d-flex m-2 " role="search">
-                        <input id="searchBox" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" oninput="newSearch()">
-                        <button class="btn btn-outline-success" type="submit" >Search</button>
+                        <input id="searchBox" class="form-control me-2" type="search" placeholder="Search"
+                            aria-label="Search" oninput="newSearch()">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <button id="showActive" class="btn btn-outline-primary mt-2 mb-2" onclick="toggleActive()">Selected</button>
+                    <button id="showActive" class="btn btn-outline-primary mt-2 mb-2"
+                        onclick="toggleActive()">Selected</button>
 
                 </div>
             </div>
         </nav>
         <div id="home" class="tab">
             <div id="cardWrapper" class="d-flex flex-row flex-wrap">
-                <!-- Card -->
+                <div id="initLoader" class="spinner-border text-primary m-auto" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                <h5 id="noRes">No Resaults for "<span id="searchTerm"></span>"<br>try to check for typos</h5>
+                <!-- Card Template For Testing -->
                 <!-- <div class="card col-lg-4 col-md-12">
                 <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
@@ -125,7 +132,7 @@
                 </div>
             </div>
 
-           
+
 
 
 
@@ -135,13 +142,28 @@
 
         </div>
         <div id="live" class="tab">
-            <p>live</p>
+            <div id="spinner" class="spinner-border text-primary m-auto" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
             <div>
                 <canvas id="report"></canvas>
             </div>
+            <p id="reportWarning" class='bold center'>Pleas select at least one coin to start Live Report</p>
         </div>
         <div id="about" class="tab">
-            <p>about</p>
+            <div class="about-wrapper">
+                <div class="about-image">
+                    <img src="./src/about.png">
+                </div>
+                <div class="about-data">
+                    <h2>Hey! 👋🏽</h2>
+                    <h5>My name is Eilam Ashbell</h5>
+                    <p>This is AJAX & JQUERY project <br>You can search for crypto currencies prices and watch live
+                        reports of them.<br>Have fun 🎉</p>
+                </div>
+
+            </div>
+
         </div>
     </div>
 

@@ -240,23 +240,29 @@ function initData() {
     )
       .then((res) => res.json())
       .then((resJ) => {
-        coinsPrice = Object.entries(resJ); // converts resJ to an array
-        // coinsPrice example: [["HALF",{USD: 13659.5}],["ALGOHALF",{USD: 10666.5}],["BCHHALF",{USD: 6387}]]
-        coinsPrice.forEach((element, index) => {    // set dataset for each coin
-          dataset.push({
-            label: `${element[0]}`,
-            yAxisID: `A`,
-            data: [element[1].USD],
-            borderColor: getColor(index),
-            backgroundColor: getColor(index),
-          });
-        });
-        initLabels(); // sets time lables for X axis
-        createChart(dataset, labels); // draw the chart
-        $("#spinner").hide();
-      });
+        if (resJ.Response == "Error") {
+            // if that API dont have data on single currency, disply message
+            // ex. error from server {"Response":"Error","Message":"cccagg_or_exchange market does not exist for this coin pair (ASDHALF-USD)","HasWarning":false,"Type":1,"RateLimit":{},"Data":{},"Cooldown":0}
+            $("#reportWarning").text(`We don't have ${coinsToReport[0]} data currently`).show();
+            $("#spinner").hide();
+        } else {
+            coinsPrice = Object.entries(resJ); // converts resJ to an array
+            // coinsPrice example: [["HALF",{USD: 13659.5}],["ALGOHALF",{USD: 10666.5}],["BCHHALF",{USD: 6387}]]
+            coinsPrice.forEach((element, index) => {    // set dataset for each coin
+            dataset.push({
+                label: `${element[0]}`,
+                yAxisID: `A`,
+                data: [element[1].USD],
+                borderColor: getColor(index),
+                backgroundColor: getColor(index),
+            });
+            });
+            initLabels(); // sets time lables for X axis
+            createChart(dataset, labels); // draw the chart
+            $("#spinner").hide();
+    }});
   } else { // if no coin selected > disply message
-    $("#reportWarning").show();
+    $("#reportWarning").text(`Pleas select at least one coin to start Live Report`).show();
     $("#spinner").hide();
   }
 }
@@ -326,7 +332,10 @@ function startInterval(reportChart) {
 // stops the chart updating and destroied id to enable the next init
 function stopLiveReport() {
   clearInterval(updateReportInterval);
+  if (reportChart) {
+    //   destroy chart only if initioned. else do nothing.
   reportChart.destroy();
+  }
 }
 
 // set different color to each coin line on the chart
